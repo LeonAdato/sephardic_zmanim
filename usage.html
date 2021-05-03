@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sephardic Congregation of Cleveland Zmanim</title>
+</head>
+<body>
+<img src="header.png">
+<h3>Sephardic Congregation of Cleveland Zmanim Page Usage</h3>
+<P>The zmanim calculation page pulls most of it's information from hebcal.com. By default it will use the location of the Sephardic Congregation of Cleveland, 2480 S. Green Road, University Heights, Ohio.</P>
+
+<P>You can control what information the page displays by adding various parameters to the URL line: </P>
+
+<UL>
+	<LI>date=yyyy-mm-dd<br>displays times for the specified day</LI>
+	<LI>shabbat=1<br>will display times for the next upcoming Shabbat</LI>
+	<UL>
+		<LI>NOTE: if you give a date AND use this parameter, and the date you give isn't actually shabbat, you'll get an error</LI>
+	</UL>
+	<LI>zip=#####<br>provides the times for the specified zipcode. Mutually exclusive from lat and long. Mutually exclusive from lat/long, city, or geoname.</LI>
+	<LI>geoname=######<br>location specified by GeoNames.org numeric ID (See cities5000.zip from https://download.geonames.org/export/dump/.). Mutually exclusive from zip, city, or lat/long.</LI>
+	<LI>city=(cityname)<br>location specified by one of the Hebcal.com legacy city identifiers (https://github.com/hebcal/dotcom/blob/master/hebcal.com/dist/cities2.txt). Mutually exclusive from zip, geoname, or lat/long.</LI>
+	<LI>lat=##.####<br>latitude. Must also include longitude and tzid. Mutually exclusive from zip, city, or geoname.</LI>
+	<LI>long=##.####<br>longitude. Must also include latitude and tzid. Mutually exclusive from zip, city, or geoname.</LI>
+	<LI>tzid=(timezone ID)<br>TimezoneIdentifier (See List of tz database time zones: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). Mutually exclusive from zip, city, or geoname.</LI>
+	<LI>debug=1<br>display all calculations and outputs for troubleshooting.</LI>
+</UL>
+
+<h3>How to</h3>
+<P>To use those parameters, you start with the basic URL (https://clevelandsephardiminyan.com/wp-content/zmanim/sephardic_zmanim.php), then a question mark (?), and then add on from there. You can use parameters in any order. In between each parameter, you need to put an ampersand ("and sign", or "&")</P>
+
+<h3>Examples</h3>
+<P>All examples use the Sephardic Congregation of Cleveland location unless otherwise specified. You can click the examples to view the results.</P>
+
+<P>show times for the current day<br>
+<code><A HREF="https://clevelandsephardiminyan.com/wp-content/zmanim/sephardic_zmanim.php">https://clevelandsephardiminyan.com/wp-content/zmanim/sephardic_zmanim.php</A></code></P>
+
+<P>show times for next shabbat<br>
+<code><A HREF="https://clevelandsephardiminyan.com/wp-content/zmanim/sephardic_zmanim.php?shabbat=1">https://clevelandsephardiminyan.com/wp-content/zmanim/sephardic_zmanim.php?shabbat=1</A></code></P>
+
+<P>show times for Aprl 4, 2021<br>
+<code><A HREF="https://clevelandsephardiminyan.com/wp-content/zmanim/sephardic_zmanim.php?date=2021-04-09">https://clevelandsephardiminyan.com/wp-content/zmanim/sephardic_zmanim.php?date=2021-04-09</A></code></P>
+
+<P>show times for Aprl 4, 2021 with debug information<br>
+<code><A HREF="https://clevelandsephardiminyan.com/wp-content/zmanim/sephardic_zmanim.php?date=2021-04-09&debug=1">https://clevelandsephardiminyan.com/wp-content/zmanim/sephardic_zmanim.php?date=2021-04-09&debug=1</A></code></P>
+
+<P>show times for Aprl 4, 2021 for Columbus Ohio, using the zip code 43215<br>
+<code><A HREF="https://clevelandsephardiminyan.com/wp-content/zmanim/sephardic_zmanim.php?date=2021-04-09&zip=43215">https://clevelandsephardiminyan.com/wp-content/zmanim/sephardic_zmanim.php?date=2021-04-09&zip=43215</A></code></P>
+
+<P>show times for Aprl 4, 2021 for Lakewood, New Jersey, using the geoname (5100280)<br>
+<code><A HREF="https://clevelandsephardiminyan.com/wp-content/zmanim/sephardic_zmanim.php?date=2021-04-09&geoname=5100280">https://clevelandsephardiminyan.com/wp-content/zmanim/sephardic_zmanim.php?date=2021-04-09&geoname=5100280</A></code></P>
+
+<P>show times for the upcoming shabbat for the Community Synagogue of Monsey, NY (89 W Maple Ave, Monsey, NY 10952) using the lat/long (41.1198654,-74.0775001)<br>
+<code><A HREF="https://clevelandsephardiminyan.com/wp-content/zmanim/sephardic_zmanim.php?shabbat=1&lat=41.1198654&long=-74.0775001">https://clevelandsephardiminyan.com/wp-content/zmanim/sephardic_zmanim.php?shabbat=1&lat=41.1198654&long=-74.0775001</A></code></P>
+
+
+
+
+
+</body>
+</html>	

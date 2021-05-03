@@ -1,0 +1,37 @@
+<html>
+<body> 
+
+<form action="sephardic_zmanim.php" method="get">
+
+<P>Go to the next upcoming Friday and pull dates:<br>
+ <input type="checkbox" id="shabbat" name="shabbat" value="1">
+  <label for="shabbat">Retrieve Upcoming Shabbat?</label><br><br>
+ 
+
+The date you want zmanim for. If you couple this with "Shabbat", this date must be a Friday.<br>
+<label for="start">Date: </label>
+<input type="date" id="date" name="date"> <br><br>
+
+You can indicate what location times will be calculated for, using ONE of the following methods:<br><br>
+
+Zip Code: <input type="text" name="zipcode" value=""><br><br>
+
+Hebcal.com legacy city identifiers (for the full list, <A HREF="https://github.com/hebcal/dotcom/blob/master/hebcal.com/dist/cities2.txt">click this link</A>).<br>
+City: <input type="text" name="city" value=""><br><br>
+
+GeoNames.org numeric ID (For a full list, see the file "cities5000.zip" from <A HREF="https://download.geonames.org/export/dump/">this link</A>.)<br>
+GeoName: <input type="text" name="geoname" value=""><br><br>
+
+Exact Latitude and Longitude.<br>
+Latitude: <input type="text" name="lat" value=""><br>
+Longitude: <input type="text" name="long" value=""><br><br>
+
+Include all calculations and outputs for troubleshooting.<br>
+ <input type="checkbox" id="debug" name="debug" value="1">
+  <label for="debug">Debug</label></P>
+
+<input type="submit" value="Go!">
+</form>
+
+</body>
+</html>
