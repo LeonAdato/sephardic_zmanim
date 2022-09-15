@@ -1,0 +1,54 @@
+<html>
+<body>
+
+<P>The following options can be used individually or in combination. Once you have made your changes, click the "Go!" button at the bottom to view the results.</P>
+
+<table border=1><tr><td>
+	<form action="sephardic_zmanim.php" method="get">
+
+
+	<P>Include Shabbat information (candle lighting, rosh chodesh information, and more):<br>
+		If you check this box and DON'T specify a date below, you'll get times for the next upcoming Shabbat.<br>
+		If you check this box and DO specify a date below, and the date you give isn't Friday, you'll get an error.<br>
+	 <input type="checkbox" id="shabbat" name="shabbat" value="1">
+	  <label for="shabbat">Provide Shabbat Times?</label><br>
+	</P>
+</td></tr><tr><td>
+
+	<P>The date you want zmanim for. If you couple this with "Shabbat", this date must be a Friday.<br>
+	<label for="start">Date: </label>
+	<input type="date" id="date" name="date"></P>
+
+</td></tr><tr><td>
+	<P>You can indicate what location times will be calculated for, using ONE of the following methods:<br><br>
+
+	Zip Code: <input type="text" name="zipcode" value=""><br><br>
+
+	----OR----<br><br>
+
+	Hebcal.com legacy city identifiers (for the full list, <A HREF="https://github.com/hebcal/dotcom/blob/master/hebcal.com/dist/cities2.txt">click this link</A>).<br>
+	City: <input type="text" name="city" value=""><br><br>
+
+	----OR----<br><br>
+
+	GeoNames.org numeric ID (For a full list, see the file "cities5000.zip" from <A HREF="https://download.geonames.org/export/dump/">this link</A>.)<br>
+	GeoName: <input type="text" name="geoname" value=""><br><br>
+
+	----OR----<br><br>
+
+	Exact Latitude and Longitude.<br>
+	Latitude: <input type="text" name="lat" value=""><br>
+	Longitude: <input type="text" name="long" value=""></P>
+
+</td></tr><tr><td>
+
+	<P>Finally, check this box if you want to include all calculations and outputs (typically you use this for troubleshooting).<br>
+	 <input type="checkbox" id="debug" name="debug" value="1">
+	  <label for="debug">Debug</label></P>
+</td></tr><tr><td>
+	<input type="submit" value="Go!">
+	</form>
+</td></tr></table>
+
+</body>
+</html>

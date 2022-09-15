@@ -10,24 +10,24 @@ Pulls information from external sites via API, uses statically assigned items (l
 
 USAGE
 -----------
-this page is served from a web server or at the commandline
-along with the URL/URI, variables can include:
+this page is served from a web server
+URL/URI variables can include:
 
-shabbat=1 / -s
+shabbat=1
 	Go to the next upcoming Friday and pull dates
-debug=1 / -u
+debug=1
 	include all calculations and outputs for troubleshooting.
-date=yyyy-mm-dd  / -dyyyy-mm-dd
-	the date you want zmanim for. if you couple this with shabbat=1/-s, this date must be a friday
-lat=##.### / -a##.### 
+date=yyyy-mm-dd
+	the date you want zmanim for. if you couple this with shabbat=1, this date must be a friday
+lat=##.###
 	latitude. Must also include longitude and tzid. Mutually exclusive from zip, city, or geoname.
-long=##.### / -o##.###
+long=##.###
 	longitude. Must also include latitude and tzid. Mutually exclusive from zip, city, or geoname.
-zip=##### / -z#####
+zip=#####
 	zip code. Mutually exclusive from lat and long. Mutually exclusive from lat/long, city, or geoname.
-geoname=(######) / -g#####
+geoname=(######)
 	location specified by GeoNames.org numeric ID (See cities5000.zip from https://download.geonames.org/export/dump/.). Mutually exclusive from zip, city, or lat/long.
-city=(city name) / -c(cityname)
+city=(city name)
 	location specified by one of the Hebcal.com legacy city identifiers (https://github.com/hebcal/dotcom/blob/master/hebcal.com/dist/cities2.txt). Mutually exclusive from zip, geoname, or lat/long.
 
 EXTERNAL SOURCE(S)
@@ -36,7 +36,7 @@ https://www.hebcal.com/home/developer-apis
 http://www.geonames.org/ (using this API requires a login)
 
 == Installation ==
-Stick it in a folder and run it from there.
+Stick it in a folder on a webserver that supports PHP and run it from there.
 
 
 == Frequently asked questions ==
