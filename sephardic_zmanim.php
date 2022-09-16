@@ -44,6 +44,7 @@ VERSION HISTORY
 				implemented hebcal API feature to determine molad
 	0.13.0 - changed sunrise/sunset method to use built-in PHP 
 			 removed CLI options
+	0.14.0 - if it's Friday, show TODAY, not next Friday
 
 DESCRIPTION	
 Pulls information from external sites via API
@@ -184,15 +185,24 @@ if ($usedate && $shabbat == 0) {
 	$setdate=1;
 	$zmanday = $usedate;
 }
+
 //if no date given and shabbat specified, use next friday and set Shabbat == 1
 if (!$usedate && $shabbat == 1) {
 	$setdate=0;
-	$friday = date_create('next Friday')->format('Y-m-d');
+	//if today is Friday, use today
+	if (date('l') == 'Friday') { 
+		$friday = date('Y-m-d');
+		//else set it for the upcoming Friday
+	} else { 
+		$friday = date_create('next Friday')->format('Y-m-d');
+	}
 	$zmanday = $friday;
 	$nextfriday = date('Y-m-d', strtotime( $friday . " +7 days"));
 	$saturday= date('Y-m-d', strtotime( $friday . " +1 days"));
 	$nextsaturday = date('Y-m-d', strtotime( $saturday . " +7 days"));
 }
+
+
 //if no date given and shabbat NOT specified, use today and set shabbat == 0
 if(!$usedate && $shabbat == 0) {
 	$setdate=0;
@@ -357,6 +367,8 @@ if ($englishparashat == "") {
 	    // "winter" mincha = Shkia-20 
 	
 	//create candle time string
+	//"early" mincha is plag-20
+	//"regular" (zman) mincha is shkia-20
 	if ($isearly == 0) { 
 		$frimincha = date('g:i a', strtotime( $frisunset . " -20 minutes"));
 		$candletext = date('m/d', strtotime($friday)) . " Candle Lighting: $candles";
