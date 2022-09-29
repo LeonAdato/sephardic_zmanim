@@ -96,7 +96,7 @@ $satshema = $frimincha = $hebrewparashat = $englishparashat = $chodeshtext = $ca
 $chodeshtext = $molad = "";
 
 // location variables
-$geostring = $zipcode = $latitude = $longitude = $city = $geoname = $kabshab = $locstring = "";
+$geostring = $zipcode = $country = $latitude = $longitude = $city = $geoname = $kabshab = $locstring = "";
 
 // CURL variables
 $friurl = $saturl = $zmanurl = $get_fritimes = $friresponse = $get_sattimes = $satresponse = $set_zmanim = $zmanresponse = "";
@@ -104,6 +104,7 @@ $friurl = $saturl = $zmanurl = $get_fritimes = $friresponse = $get_sattimes = $s
 //get commandline variables
 if(isset($_GET['date'])) {$usedate=stripcslashes($_GET['date']);}
 if(isset($_GET['zipcode'])) {$zipcode=stripcslashes($_GET['zipcode']); }
+if(isset($_GET['country'])) {$country=stripcslashes($_GET['country']); }
 if(isset($_GET['city'])) {$city=stripcslashes($_GET['city']); }
 if(isset($_GET['geoname'])) {$geoname=stripcslashes($_GET['geoname']); }
 if(isset($_GET['lat'])) {$latitude=stripcslashes($_GET['lat']); }
@@ -124,12 +125,29 @@ if ($shabbat == 1 || $shabbat == 0) {
 }
 
 if ($zipcode){
+	if (!$country) {
+		echo("<H2>Zip Code also requires a valid <A HREF=\"https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes\">ISO-3166 Country code</a></h2>\n");	
+		exit(1);
+	}
 	if (preg_match('/^[0-9]{5}$/', $zipcode)) {
 	} else {
     	echo("<H2>not a valid 5 digit zip code</h2>\n");
     	exit(1);
 	}
 }
+
+if ($country){
+	if (!$zipcode) {
+		echo("<H2>Country also requires a valid zip code</a></h2>\n");	
+    	exit(1);
+	}
+	if (preg_match('/^[a-z,A-Z]{2}$/', $country)) {
+	} else {
+    	echo("<H2>not a valid 2 letter <A HREF=\"https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes\">ISO-3166 Country code</a>.</h2>\n");
+    	exit(1);
+	}
+}
+
 if ($geoname){
 	if (preg_match('/^[0-9]{7}$/', $geoname)) {
 	} else {
@@ -151,11 +169,6 @@ if ($longitude){
     	exit(1);
 	}
 }
-//latitude
-	//-90 to 90
-//longitude
-	//-180 to 180
-
 
 //Date handler
 //if usedate exists, make sure it's in the correct format and that it's a real date
@@ -211,6 +224,15 @@ if(!$usedate && $shabbat == 0) {
 
 //set location
 if ($zipcode) {
+	$locurl = "http://api.geonames.org/postalCodeSearchJSON?postalcode=$zipcode&country=$country&username=$tzusername";
+	$get_locurl = callAPI('GET', $locurl, false);
+	$locresponse = json_decode($get_locurl, true);
+	$longitude = $locresponse['postalCodes'][0]['lng']; 
+	$latitude = $locresponse['postalCodes'][0]['lat']; 
+	$tzurl = "http://api.geonames.org/timezoneJSON?lat=$latitude&lng=$longitude&username=$tzusername";
+	$get_tzname = callAPI('GET', $tzurl, false);
+	$tzresponse = json_decode($get_tzname, true);
+	$tzid = $tzresponse['timezoneId'];
 	$geostring="&zip=$zipcode";
 	$locstring = "Zipcode $zipcode";
 }elseif ($geoname) {
