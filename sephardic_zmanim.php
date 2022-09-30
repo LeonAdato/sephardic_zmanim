@@ -156,14 +156,14 @@ if ($geoname){
 	}
 }
 if ($latitude){
-	if ($latitude >= -90 && $latitude <=-90) {
+	if ($latitude >= -90 && $latitude <= 90) {
 	} else {
     	echo("<H2>Not a valid latitude coordinate</h2>\n");
     	exit(1);
 	}
 }
 if ($longitude){
-	if ($longitude >= -180 && $longitude <=-180) {
+	if ($longitude >= -180 && $longitude <= 180) {
 	} else {
     	echo("<H2>Not a valid longitude coordinate</h2>\n");
     	exit(1);
@@ -224,11 +224,11 @@ if(!$usedate && $shabbat == 0) {
 
 //set location
 if ($zipcode) {
-	$locurl = "http://api.geonames.org/postalCodeSearchJSON?postalcode=$zipcode&country=$country&username=$tzusername";
-	$get_locurl = callAPI('GET', $locurl, false);
-	$locresponse = json_decode($get_locurl, true);
-	$longitude = $locresponse['postalCodes'][0]['lng']; 
-	$latitude = $locresponse['postalCodes'][0]['lat']; 
+	$zipurl = "http://api.geonames.org/postalCodeSearchJSON?postalcode=$zipcode&country=$country&username=$tzusername";
+    $get_zipinfo = callAPI('GET', $zipurl, false);
+    $zipresponse = json_decode($get_zipinfo, true);
+    $latitude = $zipresponse['postalCodes']['0']['lat'];
+    $longitude = $zipresponse['postalCodes']['0']['lng']; 
 	$tzurl = "http://api.geonames.org/timezoneJSON?lat=$latitude&lng=$longitude&username=$tzusername";
 	$get_tzname = callAPI('GET', $tzurl, false);
 	$tzresponse = json_decode($get_tzname, true);
