@@ -92,6 +92,8 @@ $usedate = $zmanday = $friday = $nextfriday = $nextsaturday = $friyr = $frimo = 
 // time variables
 $satshema = $frimincha = $hebrewparashat = $englishparashat = $chodeshtext = $candles = $fritzet = $sattzet = $latemotzei = $satmincha = $satarvit = $frialot = $satalot = $frishaa = $satshaa = $friminchged = $satminchged = $friminchkat = $satminchkat = $satshema = $friplag = $satplag = $zmansunrise = $zmansunset = $zmantzet = $zmanalot = $zmanshaa = $zmanplag = $frisunrise = $frisunset = $satsunrise = $frishir = "";
 
+$friminchakorb = $friminchaashrei = "";
+
 // text variables
 $chodeshtext = $molad = "";
 
@@ -390,9 +392,11 @@ if ($englishparashat == "") {
 	
 	//create candle time string
 	//"early" mincha is plag-20
-	//"regular" (zman) mincha is shkia-20
+	//"regular" (zman) mincha is korbanot shkia-23, ashrei shkia-18
 	if ($isearly == 0) { 
-		$frimincha = date('g:i a', strtotime( $frisunset . " -20 minutes"));
+		$friminchakorb = date('g:i a', strtotime( $frisunset . " -23 minutes"));
+		$friminchaashrei = date('g:i a', strtotime( $frisunset . " -18 minutes"));
+		$frimincha = "Korbanot: " . $friminchakorb . ", Ashrei: " . $friminchaashrei;
 		$candletext = date('m/d', strtotime($friday)) . " Candle Lighting: $candles";
 		$kabshab = date('g:i a', strtotime( $frimincha . " +20 minutes"));
 	} else {
