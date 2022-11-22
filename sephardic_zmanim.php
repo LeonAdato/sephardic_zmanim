@@ -90,9 +90,9 @@ $isdst=0; #old item, possibly used to determine return to early mincha
 $usedate = $zmanday = $friday = $nextfriday = $nextsaturday = $friyr = $frimo = $frid = $hebyear = $PesachDate = $SukkotDate = "";
 
 // time variables
-$satshema = $frimincha = $hebrewparashat = $englishparashat = $chodeshtext = $candles = $fritzet = $sattzet = $latemotzei = $satmincha = $satarvit = $frialot = $satalot = $frishaa = $satshaa = $friminchged = $satminchged = $friminchkat = $satminchkat = $satshema = $friplag = $satplag = $zmansunrise = $zmansunset = $zmantzet = $zmanalot = $zmanshaa = $zmanplag = $frisunrise = $frisunset = $satsunrise = $frishir = "";
+$satshema = $hebrewparashat = $englishparashat = $chodeshtext = $candles = $fritzet = $sattzet = $latemotzei = $satmincha = $satarvit = $frialot = $satalot = $frishaa = $satshaa = $friminchged = $satminchged = $friminchkat = $satminchkat = $satshema = $friplag = $satplag = $zmansunrise = $zmansunset = $zmantzet = $zmanalot = $zmanshaa = $zmanplag = $frisunrise = $frisunset = $satsunrise = $frishir = "";
 
-$friminchakorb = $friminchaashrei = "";
+$frimincha = $friminchakorb = $friminchaashrei = $friminchatext "";
 
 // text variables
 $chodeshtext = $molad = "";
@@ -394,14 +394,16 @@ if ($englishparashat == "") {
 	//"early" mincha is plag-20
 	//"regular" (zman) mincha is korbanot shkia-23, ashrei shkia-18
 	if ($isearly == 0) { 
+		$frimincha = date('g:i a', strtotime( $frisunset . " -20 minutes"));
 		$friminchakorb = date('g:i a', strtotime( $frisunset . " -23 minutes"));
 		$friminchaashrei = date('g:i a', strtotime( $frisunset . " -18 minutes"));
-		$frimincha = "Korbanot: " . $friminchakorb . ", Ashrei: " . $friminchaashrei;
+		$friminchatext = "<br>&nbsp&nbsp&nbspKorbanot: " . $friminchakorb . "<br>&nbsp&nbsp&nbspAshrei: " . $friminchaashrei;
 		$candletext = date('m/d', strtotime($friday)) . " Candle Lighting: $candles";
 		$kabshab = date('g:i a', strtotime( $frimincha . " +20 minutes"));
 	} else {
 		$candletext = date('m/d', strtotime($friday)) . " Candle Lighting: $friplag / $candles";
 		$frimincha = date('g:i a', strtotime( $friplag . " -20 minutes"));
+		$friminchatext = $frimincha;
 		$frishir = date('g:i a', strtotime( $friplag . " -40 minutes"));
 		$kabshab = "Following Mincha";
 	}
@@ -558,13 +560,20 @@ if ($debug == 1) {
 			<P><?php echo "$candletext"; ?></P></center>
 			<h3>Erev Shabbat</h3>
 			<P><?php if($isearly == 1) {echo "Shir haShirim, Dvar halacha: $frishir<br>";}?>
-			<?php echo "Mincha: $frimincha"; ?><br>
+			<?php echo "Mincha: $friminchatext"; ?><br>
 			<?php echo "Kabbalat Shabbat: $kabshab"; ?></P>
 			<h3>Shabbat Day</h3>
-			<P><?php echo "Shacharit (korbanot): 8:15am"; ?><br> 
-			<?php echo "Hodu: 8:30am"; ?><br> 
+			<P><?php echo "Shacharit:<br>&nbsp&nbsp&nbspKorbanot: 8:15am<br>&nbsp&nbsp&nbspHodu: 8:30am"; ?><br> 
 			<?php echo "Mincha: $satmincha"; ?><br> 
 			<?php echo "Arvit: $satarvit"; ?></P>
+			<h3>Weekly Tefillot</h3>
+			<P>Sunday Shacharit:
+			<br>&nbsp&nbsp&nbspKorbanot: 7:30am
+			<br>&nbsp&nbsp&nbspHodu: 7:40am
+			<br>Mon-Fri Shacharit
+			<br>&nbsp&nbsp&nbspKorbanot: 6:35am
+			<br>&nbsp&nbsp&nbspHodu: 6:45am
+			<br>Sunday - Thursday Arvit: 9:05pm</P>
 		</td>
 		<td style="width: 2.25in">
 			<small><h3>Zmanim</h3>
