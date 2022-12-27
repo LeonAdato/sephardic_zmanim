@@ -45,6 +45,7 @@ VERSION HISTORY
 	0.13.0 - changed sunrise/sunset method to use built-in PHP 
 			 removed CLI options
 	0.14.0 - if it's Friday, show TODAY, not next Friday
+	0.15.0 - added next day/previous day links, removed commandline options
 
 DESCRIPTION	
 Pulls information from external sites via API
@@ -56,21 +57,21 @@ USAGE
 this page is served from a web server or at the commandline
 along with the URL/URI, variables can include:
 
-shabbat=1 / -s
+shabbat=1
 	Go to the next upcoming Friday and pull dates
-debug=1 / -u
+debug=1
 	include all calculations and outputs for troubleshooting.
-date=yyyy-mm-dd  / -dyyyy-mm-dd
+date=yyyy-mm-dd
 	the date you want zmanim for. if you couple this with shabbat=1/-s, this date must be a friday
-lat=##.### / -a##.### 
+lat=##.###
 	latitude. Must also include longitude and tzid. Mutually exclusive from zip, city, or geoname.
-long=##.### / -o##.###
+long=##.###
 	longitude. Must also include latitude and tzid. Mutually exclusive from zip, city, or geoname.
-zip=##### / -z#####
+zip=#####
 	zip code. Mutually exclusive from lat and long. Mutually exclusive from lat/long, city, or geoname.
-geoname=(######) / -g#####
+geoname=######
 	location specified by GeoNames.org numeric ID (See cities5000.zip from https://download.geonames.org/export/dump/.). Mutually exclusive from zip, city, or lat/long.
-city=(city name) / -c(cityname)
+city=city name
 	location specified by one of the Hebcal.com legacy city identifiers (https://github.com/hebcal/dotcom/blob/master/hebcal.com/dist/cities2.txt). Mutually exclusive from zip, geoname, or lat/long.
 
 EXTERNAL SOURCE(S)
@@ -92,7 +93,7 @@ $usedate = $zmanday = $friday = $nextfriday = $nextsaturday = $friyr = $frimo = 
 // time variables
 $satshema = $hebrewparashat = $englishparashat = $chodeshtext = $candles = $fritzet = $sattzet = $latemotzei = $satmincha = $satarvit = $frialot = $satalot = $frishaa = $satshaa = $friminchged = $satminchged = $friminchkat = $satminchkat = $satshema = $friplag = $satplag = $zmansunrise = $zmansunset = $zmantzet = $zmanalot = $zmanshaa = $zmanplag = $frisunrise = $frisunset = $satsunrise = $frishir = "";
 
-$frimincha = $friminchakorb = $friminchaashrei = $friminchatext "";
+$frimincha = $friminchakorb = $friminchaashrei = $friminchatext = "";
 
 // text variables
 $chodeshtext = $molad = "";
@@ -102,6 +103,11 @@ $geostring = $zipcode = $country = $latitude = $longitude = $city = $geoname = $
 
 // CURL variables
 $friurl = $saturl = $zmanurl = $get_fritimes = $friresponse = $get_sattimes = $satresponse = $set_zmanim = $zmanresponse = "";
+
+//next-previous URL variables
+$yesterday = $tomorrow = $urlstart = $baseurl = $urlscheme = $urlhost = $urlpath = $urlparams = "";
+$queryParts = $params = $param = $item = $urlquery = $key = $value = "";
+$yesterdayurl = $tomorrowurl = "";
 
 //get commandline variables
 if(isset($_GET['date'])) {$usedate=stripcslashes($_GET['date']);}
@@ -213,16 +219,54 @@ if (!$usedate && $shabbat == 1) {
 	}
 	$zmanday = $friday;
 	$nextfriday = date('Y-m-d', strtotime( $friday . " +7 days"));
-	$saturday= date('Y-m-d', strtotime( $friday . " +1 days"));
+	$saturday = date('Y-m-d', strtotime( $friday . " +1 days"));
 	$nextsaturday = date('Y-m-d', strtotime( $saturday . " +7 days"));
 }
-
 
 //if no date given and shabbat NOT specified, use today and set shabbat == 0
 if(!$usedate && $shabbat == 0) {
 	$setdate=0;
 	$zmanday = date('Y-m-d');
 }
+
+//set initital next day/previous day URL
+$yesterday = date('Y-m-d', strtotime( $zmanday . " -1 days"));
+$tomorrow = date('Y-m-d', strtotime( $zmanday . " +1 days"));
+
+$urlstart = 'https://';
+if (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
+	$urlstart = 'http://';
+}
+$baseurl =  "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+$urlscheme = parse_url($baseurl, PHP_URL_SCHEME);
+$urlhost = parse_url($baseurl, PHP_URL_HOST);
+$urlpath = parse_url($baseurl, PHP_URL_PATH);
+$urlparams = parse_url($baseurl, PHP_URL_QUERY);
+$queryParts = explode('&', $urlparams);
+$params = array();
+foreach ($queryParts as $param) {
+    $item = explode('=', $param);
+    $params[$item[0]] = $item[1]; 
+}
+if (array_key_exists('shabbat', $params)) {
+    unset($params['shabbat']);    
+}
+
+$urlquery = "";
+$params['date'] = $yesterday;
+foreach ($params as $key => $value) {
+	$urlquery = $urlquery . '&' . $key . '=' . $value;
+}
+$urlquery = ltrim($urlquery, '&');
+$yesterdayurl = $urlstart.$urlhost.$urlpath.'?'.$urlquery;
+
+$urlquery = "";
+$params['date'] = $tomorrow;
+foreach ($params as $key => $value) {
+	$urlquery = $urlquery . '&' . $key . '=' . $value;
+}
+$urlquery = ltrim($urlquery, '&');
+$tomorrowurl = $urlstart.$urlhost.$urlpath.'?'.$urlquery;
 
 //set location
 if ($zipcode) {
@@ -463,6 +507,7 @@ function callAPI($method, $url, $data){
    return $result;
 }
 
+//Print section
 if ($debug == 1) {
 	if ($shabbat == 1) {
 		echo "DEBUG INFO<br>\n";
@@ -500,6 +545,8 @@ if ($debug == 1) {
 		echo "Saturday Sha'a " . number_format((float)$satshaa/60, 2, '.', '') ." minutes<br>\n";
 		echo "Molad: $molad<br>\n";
 		echo "Chodesh text: $chodeshtext<br>\n";
+		echo "Yesterday URL: $yesterdayurl<br>\n";
+		echo "Tomorrow URL: $tomorrowurl<br>\n";
 		echo "END DEBUG INFO<br><br>\n\n";
 
 	} else {
@@ -518,6 +565,8 @@ if ($debug == 1) {
 		echo "Sunset/Shkia $zmansunset<br>\n";
 		echo "Tzet (shkia+45) $zmantzet<br>\n";
 		echo "Sha'a " . number_format((float)$zmanshaa/60, 2, '.', '') ." minutes<br>\n";
+		echo "Yesterday URL: $yesterdayurl<br>\n";
+		echo "Tomorrow URL: $tomorrowurl<br>\n";
 		echo "END DEBUG INFO<br><br>\n\n";
 	}
 }
@@ -613,6 +662,7 @@ if ($debug == 1) {
 <?php endif; ?>
 	</tr>
 </table>
+<P><A HREF="<?php echo $yesterdayurl; ?>">Prev day</A>....<A HREF="<?php echo $tomorrowurl; ?>">Next day</A></P>
 <P>For information on how to use this webpage, click <a href="usage.html">here</a></P>
 <P>NOTE: Times are calculated automatically based on the location informatin provided. Because zip codes can cover a large area; and because of variations in things like the source of sunrise/sunset, height of elevation, rounding seconds to minutes, etc. times may be off by as much as 2 minutes. Please plan accordingly.</P>
 </body>
