@@ -314,15 +314,18 @@ $offset = $tzoff/3600;
 
 // get sunrise and sunset for the day; or Friday and Saturday
 if ($shabbat == 1) { //get times for Shabbat
-	$frisunrise = date_sunrise(strtotime($friday),SUNFUNCS_RET_STRING,$latitude,$longitude,90.83,$offset);
-	$frisunrise = date('g:ia', strtotime($frisunrise));
-	$frisunset = date_sunset(strtotime($friday),SUNFUNCS_RET_STRING,$latitude,$longitude,90.83,$offset);
-	$frisunset = date('g:ia', strtotime($frisunset));
+	$sun_info = date_sun_info(strtotime($friday),$latitude,$longitude);
+	$frisunrise = $sun_info['sunrise'];
+	$frisunrise = date('g:i:s a ', $frisunrise);
+	$frisunset = $sun_info['sunset'];
+	$frisunset = date('g:i:s a', $frisunset);
+	
 	$saturday= date('Y-m-d', strtotime( $friday . " +1 days"));
-	$satsunrise = date_sunrise(strtotime($saturday),SUNFUNCS_RET_STRING,$latitude,$longitude,90.83,$offset);
-	$satsunrise = date('g:ia', strtotime($satsunrise));
-	$satsunset = date_sunset(strtotime($saturday),SUNFUNCS_RET_STRING,$latitude,$longitude,90.83,$offset);
-	$satsunset = date('g:ia', strtotime($satsunset));
+	$sun_info = date_sun_info(strtotime($saturday),$latitude,$longitude);
+	$satsunrise = $sun_info['sunrise'];
+	$satsunrise = date('g:i:s a ', $satsunrise);
+	$satsunset = $sun_info['sunset'];
+	$satsunset = date('g:i:s a', $satsunset);
 
 	//FIXED TIMES
 	$friyr = date('Y',strtotime($friday));
@@ -452,13 +455,11 @@ if ($englishparashat == "") {
 		$kabshab = "Following Mincha";
 	}
 } else {	//get times for just $zmanday
-	$zmanurl = "https://www.hebcal.com/zmanim?cfg=json$geostring&date=$zmanday";
-	$get_zmantimes = callAPI('GET', $zmanurl, false);
-	$zmanresponse = json_decode($get_zmantimes, true);
-	//if ( $zmanresponse['response']['errors'] ) { $zmanerrors = $zmanresponse['response']['errors']; }
-	//if ( $zmanresponse['response']['data'][0] ) { $zmandata = $zmanresponse['response']['data'][0]; }
-	$zmansunrise = date('g:i a', strtotime($zmanresponse['times']['sunrise']));
-	$zmansunset = date('g:i a', strtotime($zmanresponse['times']['sunset']));
+	$sun_info = date_sun_info(strtotime($zmanday),$latitude,$longitude);
+	$zmansunrise = $sun_info['sunrise'];
+	$zmansunrise = date('g:i:s a ', $zmansunrise);
+	$zmansunset = $sun_info['sunset'];
+	$zmansunset = date('g:i:s a', $zmansunset);
 	$zmantzet = date('g:i a', strtotime( $zmansunset . " +45 minutes"));
 		// Alot Hashachar ("alot") = netz-((shkia-netz)/10)
 	$zmanalot = date('g:i a', strtotime($zmansunrise)-((strtotime($zmansunset) - strtotime($zmansunrise))/10));
