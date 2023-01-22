@@ -376,7 +376,10 @@ if ($shabbat == 1) { //get times for Shabbat
 		if (date('Y-m-d', strtotime($zmanitem['date'])) == $saturday) {
 			if ($zmanitem['category'] == "mevarchim") {
 				$mevarchim = 1;
-				$molad = $zmanitem['memo'];
+				$moladraw = $zmanitem['memo'];
+				$moladtext = substr($moladraw,0,strpos($moladraw,"after ",0)+6);
+				$moladtime = date('g:ia', strtotime(substr($moladraw,strpos($moladraw,"after ",0)+6)));
+				$molad = "$moladtext $moladtime";
 			}
 			if ($zmanitem['category'] == "parashat") {
 				$hebrewparashat = $zmanitem['hebrew'];
