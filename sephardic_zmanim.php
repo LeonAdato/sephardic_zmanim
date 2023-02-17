@@ -46,6 +46,8 @@ VERSION HISTORY
 			 removed CLI options
 	0.14.0 - if it's Friday, show TODAY, not next Friday
 	0.15.0 - added next day/previous day links, removed commandline options
+	0.16.0 - reformated mevorchim times to be rabbi-readable
+	0.27.0 - added misheyakir (time for tallit and tefillin) at 66 halachic minutes before netz
 
 DESCRIPTION	
 Pulls information from external sites via API
@@ -91,7 +93,7 @@ $isdst=0; #old item, possibly used to determine return to early mincha
 $usedate = $zmanday = $friday = $nextfriday = $nextsaturday = $friyr = $frimo = $frid = $hebyear = $PesachDate = $SukkotDate = "";
 
 // time variables
-$satshema = $hebrewparashat = $englishparashat = $chodeshtext = $candles = $fritzet = $sattzet = $latemotzei = $satmincha = $satarvit = $frialot = $satalot = $frishaa = $satshaa = $friminchged = $satminchged = $friminchkat = $satminchkat = $satshema = $friplag = $satplag = $zmansunrise = $zmansunset = $zmantzet = $zmanalot = $zmanshaa = $zmanplag = $frisunrise = $frisunset = $satsunrise = $frishir = "";
+$satshema = $hebrewparashat = $englishparashat = $chodeshtext = $candles = $fritzet = $sattzet = $latemotzei = $satmincha = $satarvit = $frialot = $satalot = $frishaa = $satshaa = $friminchged = $satminchged = $friminchkat = $satminchkat = $satshema = $friplag = $satplag = $zmansunrise = $zmansunset = $zmantzet = $zmanalot = $zmanshaa = $zmanplag = $frisunrise = $frisunset = $satsunrise = $frishir = $misheyakir = "";
 
 $frimincha = $friminchakorb = $friminchaashrei = $friminchatext = "";
 
@@ -469,6 +471,11 @@ if ($englishparashat == "") {
 	    // Sha'a (halachic hour) = (tzait - Alot) / 12
 	$zmanshaa = (strtotime($zmantzet)-strtotime($zmanalot))/12;
 	//COMPOUND CALCULATIONS
+		// Misheyakir = 66 halachic minutes before netz
+	#$zmanmin = (strtotime($zmantzet)-strtotime($zmanalot))/12/60;
+	#$zmanminpretty = date('g:ia', (strtotime($zmantzet)-strtotime($zmanalot))/12/60);
+	#$mish_minutes = ((strtotime($zmantzet)-strtotime($zmanalot))/12/60)*66;
+	$misheyakir = date('g:i a', strtotime($zmansunrise) - ((strtotime($zmantzet)-strtotime($zmanalot))/12/60)*66);
 		// Mincha Gedola = 6.5 sha’a after ‘alot 
 	$zmanminchged = date('g:i a', strtotime($zmanalot)+(((strtotime($zmantzet)-strtotime($zmanalot))/12))*6.5);
 	    // Mincha ketana = 9.5 sha’a after ‘alot 
@@ -560,6 +567,7 @@ if ($debug == 1) {
 		echo "Zmanurl $zmanurl<br>\n";
 		echo "Location $locstring<br>\n";
 		echo "Date $zmanday<br>\n";
+		echo "Misheyakir (66 min before Netz) $misheyakir<br>\n";
 		echo "Alot (netz-(shkia-netz)/10) $zmanalot<br>\n";
 		echo "Sunrise/Netz $zmansunrise<br>\n";
 		echo "Sof Zman Kria Shema $zmanshema<br>\n";
@@ -653,6 +661,7 @@ if ($debug == 1) {
 		<td style="width: 4in">
 			<h3><?php echo "Zmanim for Date: $zmanday"; ?></h3><br>
 			<P><?php echo "Location: $locstring"; ?><br>
+			<?php echo "Misheyakir (tallit/tefillin): $misheyakir"; ?><br>
 			<?php echo "Alot haShachar: $zmanalot"; ?><br>
 			<?php echo "Sunrise / Netz: $zmansunrise"; ?><br>
 			<?php echo "Sof zman kria shema: $zmanshema"; ?><br>
