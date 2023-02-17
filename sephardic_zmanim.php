@@ -47,7 +47,7 @@ VERSION HISTORY
 	0.14.0 - if it's Friday, show TODAY, not next Friday
 	0.15.0 - added next day/previous day links, removed commandline options
 	0.16.0 - reformated mevorchim times to be rabbi-readable
-	0.27.0 - added misheyakir (time for tallit and tefillin) at 66 halachic minutes before netz
+	0.17.0 - added misheyakir (time for tallit and tefillin) at 66 halachic minutes before netz
 
 DESCRIPTION	
 Pulls information from external sites via API
