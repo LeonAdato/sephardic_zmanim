@@ -47,7 +47,8 @@ VERSION HISTORY
 	0.14.0 - if it's Friday, show TODAY, not next Friday
 	0.15.0 - added next day/previous day links, removed commandline options
 	0.16.0 - reformated mevorchim times to be rabbi-readable
-	0.27.0 - added misheyakir (time for tallit and tefillin) at 66 halachic minutes before netz
+	0.17.0 - added misheyakir (time for tallit and tefillin) at 66 halachic minutes before netz
+	0.18.0 - set weekday mincha to shkia - 20 min
 
 DESCRIPTION	
 Pulls information from external sites via API
@@ -314,7 +315,7 @@ $datetime = date_create($friday, new DateTimeZone("GMT"));
 $tzoff = timezone_offset_get($tz, $datetime );
 $offset = $tzoff/3600;
 
-// get sunrise and sunset for the day; or Friday and Saturday
+// get sunrise and sunset for the day; or Friday, Saturday and Sun/Thu if it's Shabbat
 if ($shabbat == 1) { //get times for Shabbat
 	$sun_info = date_sun_info(strtotime($friday),$latitude,$longitude);
 	$frisunrise = $sun_info['sunrise'];
@@ -328,6 +329,18 @@ if ($shabbat == 1) { //get times for Shabbat
 	$satsunrise = date('g:i:s a ', $satsunrise);
 	$satsunset = $sun_info['sunset'];
 	$satsunset = date('g:i:s a', $satsunset);
+
+	$sunday = date('Y-m-d', strtotime( $saturday . " +1 days"));
+	$sun_info = date_sun_info(strtotime($sunday),$latitude,$longitude);
+	$sunsunset = $sun_info['sunset'];
+	$sunsunset = date('g:i:s a', $sunsunset);
+	$sundaymincha = date('g:ia', strtotime( $sunsunset . " -20 minutes"));
+
+	$thursday = date('Y-m-d', strtotime( $sunday . " +4 days"));
+	$sun_info = date_sun_info(strtotime($thursday),$latitude,$longitude);
+	$thusunset = $sun_info['sunset'];
+	$thusunset = date('g:i:s a', $thusunset);
+	$thursdaymincha = date('g:ia', strtotime( $thusunset . " -20 minutes"));
 
 	//FIXED TIMES
 	$friyr = date('Y',strtotime($friday));
@@ -634,7 +647,7 @@ if ($debug == 1) {
 			<br>Mon-Fri Shacharit
 			<br>&nbsp&nbsp&nbspKorbanot: 6:35am
 			<br>&nbsp&nbsp&nbspHodu: 6:45am
-			<br>Sunday - Thursday Arvit: 9:05pm</P>
+			<br><?php echo "Sun-Thu Mincha: $sundaymincha - $thursdaymincha"; ?></P>
 		</td>
 		<td style="width: 2.25in">
 			<small><h3>Zmanim</h3>
