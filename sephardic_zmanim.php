@@ -48,7 +48,10 @@ VERSION HISTORY
 	0.15.0 - added next day/previous day links, removed commandline options
 	0.16.0 - reformated mevorchim times to be rabbi-readable
 	0.17.0 - added misheyakir (time for tallit and tefillin) at 66 halachic minutes before netz
+<<<<<<< HEAD
 	0.18.0 - set weekday mincha to shkia - 20 min
+=======
+>>>>>>> origin
 
 DESCRIPTION	
 Pulls information from external sites via API
